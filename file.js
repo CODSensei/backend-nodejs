@@ -9,5 +9,11 @@ const fs = require("fs");
 // });
 
 //Synchronous
-const result = fs.readFileSync("./contact.txt", "utf-8");
-console.log(result);
+// const result = fs.readFileSync("./contact.txt", "utf-8");
+// console.log(result);
+
+//Asynchronous
+fs.readFile("./contact.txt", "utf-8", (error, result) => {
+  if (error) console.error(error);
+  else console.log(result);
+});
