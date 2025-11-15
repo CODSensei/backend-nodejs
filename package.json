@@ -1,0 +1,14 @@
+{
+  "name": "piyush-garg-nodejs",
+  "version": "1.0.0",
+  "description": "Learning nodejs from Piyush Garg",
+  "license": "ISC",
+  "author": "CODSensei",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "hello": "node helloWorld/helloWorld.js",
+    "start": "node index.js"
+  }
+}
