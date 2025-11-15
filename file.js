@@ -13,7 +13,10 @@ const fs = require("fs");
 // console.log(result);
 
 //Asynchronous
-fs.readFile("./contact.txt", "utf-8", (error, result) => {
-  if (error) console.error(error);
-  else console.log(result);
-});
+// fs.readFile("./contact.txt", "utf-8", (error, result) => {
+//   if (error) console.error(error);
+//   else console.log(result);
+// });
+
+//Synchronous
+fs.appendFileSync("./test.txt", new Date().getDate().toLocaleString());
