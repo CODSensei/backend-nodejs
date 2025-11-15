@@ -4,6 +4,10 @@ const fs = require("fs");
 // fs.writeFileSync("./test.txt", "Hey there");
 
 //Asynchronous
-fs.writeFile("./testAsync.txt", "Hey there async", (err) => {
-  console.error(err);
-});
+// fs.writeFile("./testAsync.txt", "Hey there async", (err) => {
+//   console.error(err);
+// });
+
+//Synchronous
+const result = fs.readFileSync("./contact.txt", "utf-8");
+console.log(result);
