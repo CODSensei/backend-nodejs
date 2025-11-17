@@ -6,13 +6,15 @@ const myServer = http.createServer((req, res) => {
   // logger
   if (req.url === "/favicon.ico") return res.end();
   const myUrl = new URL(`http://localhost:8000${req.url}`);
-  const log = `${Date.now()}: New Request on: ${myUrl.pathname}\n`;
+  const log = `${Date.now()}: New ${req.method} Request on: ${
+    myUrl.pathname
+  }\n`;
   fs.appendFile("./log.txt", log, (err, data) => {
     if (err) console.error(err);
     else {
       switch (myUrl.pathname) {
         case "/":
-          res.end("Home Page");
+          if (req.method === "GET") res.end("Home Page");
           break;
         case "/about":
           const username = myUrl?.searchParams.get("name");
@@ -20,6 +22,12 @@ const myServer = http.createServer((req, res) => {
             `Hi ${username !== null ? username : "user"}, I am Krishna Agarwal`
           );
           break;
+        case "/signup":
+          if (req.method === "GET") res.end("This is a signup form");
+          else if (req.method === "POST") {
+            // DB Query
+            res.end("Success !!");
+          }
         default:
           res.end("404 Not Found!!");
           break;

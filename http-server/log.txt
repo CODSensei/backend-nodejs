@@ -27,3 +27,8 @@
 1763281578940: New Request on: /about
 1763281608406: New Request on: /about
 1763281613990: New Request on: /about?name=garv
+1763406038618: New Request on: /
+1763406053052: New GET Request on: /
+1763406231999: New GET Request on: /
+1763406236655: New GET Request on: /signup
+1763406393808: New GET Request on: /signup
