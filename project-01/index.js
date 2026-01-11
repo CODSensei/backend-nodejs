@@ -5,6 +5,15 @@ const app = express();
 const PORT = 8000;
 
 app.use(express.urlencoded({ extended: false }));
+// app.use((req, res, next) => {
+//   console.log("Middleware 1 : ", req.body);
+//   next();
+// });
+
+// app.use((req, res, next) => {
+//   console.log("Middleware 2");
+//   return res.json(req.body);
+// });
 
 //Routes
 
@@ -13,7 +22,7 @@ app.get("/api/users", (req, res) => {
   return res.json(users);
 });
 
-// users rendering apu
+// users rendering api
 app.get("/users", (req, res) => {
   const html = `
         <ul>
@@ -62,12 +71,31 @@ app
     return res.json(user);
   })
   .patch((req, res) => {
-    // TODO : update new user
-    res.json({ status: "pending" });
+    const body = req.body;
+    const id = Number(req.params.id);
+    fs.readFile("./MOCK_DATA.json", "utf-8", (error, result) => {
+      if (error) console.error(error);
+      let users = JSON.parse(result);
+      let targetUserIndex = users.findIndex((user) => user.id === id);
+      users[targetUserIndex] = { id, ...body };
+      fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (error) => {
+        console.error(error);
+      });
+    });
+    res.json({ status: "success", id, ...body });
   })
   .delete((req, res) => {
-    // TODO : delete new user
-    res.json({ status: "pending" });
+    const id = Number(req.params.id);
+    fs.readFile("./MOCK_DATA.json", "utf-8", (error, result) => {
+      if (error) console.error(error);
+      let users = JSON.parse(result);
+      let targetUserIndex = users.findIndex((user) => user.id === id);
+      users.splice(targetUserIndex, 1);
+      fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (error) => {
+        console.error(error);
+      });
+    });
+    res.json({ status: "success" });
   });
 
 app.listen(PORT, () => console.log("Server listening " + PORT));
