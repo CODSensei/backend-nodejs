@@ -47,7 +47,7 @@ app.post("/api/user", (req, res) => {
   const body = req.body;
   users.push({ ...body, id: users.length + 1 });
   fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
-    res.json({ status: "success", id: users.length });
+    res.status(201).json({ status: "success", id: users.length });
   });
 });
 
@@ -69,6 +69,7 @@ app
   .get((req, res) => {
     const id = Number(req.params.id);
     const user = users.find((user) => user.id === id);
+    if (!user) res.status(404).json({ error: "User not found!" });
     return res.json(user);
   })
   .patch((req, res) => {
