@@ -4,7 +4,7 @@ const users = require("./MOCK_DATA.json");
 const app = express();
 const PORT = 8000;
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false })); // works on headers
 // app.use((req, res, next) => {
 //   console.log("Middleware 1 : ", req.body);
 //   next();
@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // users listing api
 app.get("/api/users", (req, res) => {
+  res.setHeader("X-myName", "CODSensei"); // X to show custom header
   return res.json(users);
 });
 
