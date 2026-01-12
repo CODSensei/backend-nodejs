@@ -43,8 +43,8 @@ app.use(express.urlencoded({ extended: false })); // works on headers
 
 //Routes
 // users listing api
-app.get("/api/users", (req, res) => {
-  res.setHeader("X-myName", "CODSensei"); // X to show custom header
+app.get("/api/users", async (req, res) => {
+  const users = await User.find({});
   return res.json(users);
 });
 
