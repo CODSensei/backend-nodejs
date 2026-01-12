@@ -45,6 +45,16 @@ app.get("/users", (req, res) => {
 // new user
 app.post("/api/user", (req, res) => {
   const body = req.body;
+  if (
+    !body ||
+    !body.first_name ||
+    !body.last_name ||
+    !body.gender ||
+    !body.job_title ||
+    !body.email
+  ) {
+    return res.status(400).json({ msg: "All fields are required!" });
+  }
   users.push({ ...body, id: users.length + 1 });
   fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
     res.status(201).json({ status: "success", id: users.length });
@@ -75,16 +85,29 @@ app
   .patch((req, res) => {
     const body = req.body;
     const id = Number(req.params.id);
+    if (
+      !body ||
+      !body.first_name ||
+      !body.last_name ||
+      !body.gender ||
+      !body.job_title ||
+      !body.email
+    ) {
+      return res.status(400).json({ msg: "All fields are required!" });
+    }
     fs.readFile("./MOCK_DATA.json", "utf-8", (error, result) => {
       if (error) console.error(error);
       let users = JSON.parse(result);
       let targetUserIndex = users.findIndex((user) => user.id === id);
+      if (targetUserIndex === -1) {
+        return res.status(404).json({ msg: "User not found!" });
+      }
       users[targetUserIndex] = { id, ...body };
       fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (error) => {
         console.error(error);
       });
     });
-    res.json({ status: "success", id, ...body });
+    return res.json({ status: "success", id, ...body });
   })
   .delete((req, res) => {
     const id = Number(req.params.id);
@@ -92,12 +115,15 @@ app
       if (error) console.error(error);
       let users = JSON.parse(result);
       let targetUserIndex = users.findIndex((user) => user.id === id);
+      if (targetUserIndex === -1) {
+        return res.status(404).json({ msg: "User not found!" });
+      }
       users.splice(targetUserIndex, 1);
       fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (error) => {
         console.error(error);
       });
     });
-    res.json({ status: "success" });
+    return res.json({ status: "success" });
   });
 
 app.listen(PORT, () => console.log("Server listening " + PORT));
