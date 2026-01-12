@@ -49,7 +49,8 @@ app.get("/api/users", (req, res) => {
 });
 
 // users rendering api
-app.get("/users", (req, res) => {
+app.get("/users", async (req, res) => {
+  const users = await User.find({});
   const html = `
         <ul>
         ${users
@@ -85,19 +86,6 @@ app.post("/api/user", async (req, res) => {
     .json({ status: "success", msg: "User created successfully", result });
 });
 
-// // update user
-// app.patch("/api/user/:id", (req, res) => {
-//   // TODO : update new user
-//   res.json({ status: "pending" });
-// });
-
-// // delete user
-// app.delete("/api/user/:id", (req, res) => {
-//   // TODO : delete new user
-//   res.json({ status: "pending" });
-// });
-
-// merging req on same route
 app
   .route("/api/user/:id")
   .get((req, res) => {
