@@ -1,47 +1,22 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const fs = require("fs");
+const users = require("./MOCK_DATA.json");
 const app = express();
 const PORT = 8000;
 
-// connection to mongoDb
-mongoose
-  .connect("mongodb://127.0.0.1:27017/project-1") // automatically creates a db of name project-1
-  .then(() => console.log("MongoDB connected"))
-  .catch((error) => console.error(error));
-
-//Schema
-const userSchema = new mongoose.Schema(
-  {
-    first_name: {
-      type: String,
-      required: true,
-    },
-    last_name: {
-      type: String,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    job_title: {
-      type: String,
-      required: true,
-    },
-    gender: {
-      type: String,
-      required: true,
-    },
-  },
-  { timestamps: true }
-);
-
-//Model
-const User = mongoose.model("user", userSchema); // creates a collection user in mongoDb
-
 app.use(express.urlencoded({ extended: false })); // works on headers
+// app.use((req, res, next) => {
+//   console.log("Middleware 1 : ", req.body);
+//   next();
+// });
+
+// app.use((req, res, next) => {
+//   console.log("Middleware 2");
+//   return res.json(req.body);
+// });
 
 //Routes
+
 // users listing api
 app.get("/api/users", (req, res) => {
   res.setHeader("X-myName", "CODSensei"); // X to show custom header
@@ -60,8 +35,15 @@ app.get("/users", (req, res) => {
   return res.send(html);
 });
 
+// user by id
+// app.get("/api/user/:id", (req, res) => {
+//   const id = Number(req.params.id);
+//   const user = users.find((user) => user.id === id);
+//   return res.json(user);
+// });
+
 // new user
-app.post("/api/user", async (req, res) => {
+app.post("/api/user", (req, res) => {
   const body = req.body;
   if (
     !body ||
@@ -73,16 +55,10 @@ app.post("/api/user", async (req, res) => {
   ) {
     return res.status(400).json({ msg: "All fields are required!" });
   }
-  const result = await User.create({
-    first_name: body.first_name,
-    last_name: body.last_name,
-    email: body.email,
-    job_title: body.job_title,
-    gender: body.gender,
+  users.push({ ...body, id: users.length + 1 });
+  fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
+    res.status(201).json({ status: "success", id: users.length });
   });
-  res
-    .status(201)
-    .json({ status: "success", msg: "User created successfully", result });
 });
 
 // // update user
