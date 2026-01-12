@@ -110,20 +110,8 @@ app
     });
     return res.json({ status: "success", id: req.params.id, ...body });
   })
-  .delete((req, res) => {
-    const id = Number(req.params.id);
-    fs.readFile("./MOCK_DATA.json", "utf-8", (error, result) => {
-      if (error) console.error(error);
-      let users = JSON.parse(result);
-      let targetUserIndex = users.findIndex((user) => user.id === id);
-      if (targetUserIndex === -1) {
-        return res.status(404).json({ msg: "User not found!" });
-      }
-      users.splice(targetUserIndex, 1);
-      fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (error) => {
-        console.error(error);
-      });
-    });
+  .delete(async (req, res) => {
+    await User.findByIdAndDelete(req.params.id);
     return res.json({ status: "success" });
   });
 
