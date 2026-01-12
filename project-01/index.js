@@ -93,9 +93,8 @@ app
     if (!user) res.status(404).json({ error: "User not found!" });
     return res.json(user);
   })
-  .patch((req, res) => {
+  .patch(async (req, res) => {
     const body = req.body;
-    const id = Number(req.params.id);
     if (
       !body ||
       !body.first_name ||
@@ -106,19 +105,10 @@ app
     ) {
       return res.status(400).json({ msg: "All fields are required!" });
     }
-    fs.readFile("./MOCK_DATA.json", "utf-8", (error, result) => {
-      if (error) console.error(error);
-      let users = JSON.parse(result);
-      let targetUserIndex = users.findIndex((user) => user.id === id);
-      if (targetUserIndex === -1) {
-        return res.status(404).json({ msg: "User not found!" });
-      }
-      users[targetUserIndex] = { id, ...body };
-      fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (error) => {
-        console.error(error);
-      });
+    await User.findByIdAndUpdate(req.params.id, {
+      ...body,
     });
-    return res.json({ status: "success", id, ...body });
+    return res.json({ status: "success", id: req.params.id, ...body });
   })
   .delete((req, res) => {
     const id = Number(req.params.id);
