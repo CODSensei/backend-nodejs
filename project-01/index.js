@@ -88,8 +88,9 @@ app.post("/api/user", async (req, res) => {
 
 app
   .route("/api/user/:id")
-  .get((req, res) => {
+  .get(async (req, res) => {
     const id = Number(req.params.id);
+    const users = await User.find({});
     const user = users.find((user) => user.id === id);
     if (!user) res.status(404).json({ error: "User not found!" });
     return res.json(user);
