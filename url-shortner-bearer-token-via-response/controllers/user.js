@@ -20,9 +20,10 @@ const handleUserLogin = async (req, res) => {
   });
   if (!user) return res.redirect("/login");
   const token = setUser(user);
-  res.cookie("uid", token);
+  res.cookie("token", token);
 
-  return res.json({ token });
+  // return res.json({ token });
+  return res.redirect("/");
 };
 
 module.exports = {
